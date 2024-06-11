@@ -1,5 +1,5 @@
 {
-  "name": "qs-currency-converter",
+  "name": "currency-converter-qs",
   "version": "1.0.1",
   "description": "this is a currency converter app which is converter into six country currency which is [PKR,USD,INR,IRR,SAR,EUR]",
   "main": "index.js",
