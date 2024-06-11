@@ -1,38 +1,80 @@
 #! /usr/bin/env node
 import inquirer from "inquirer";
 import chalk from "chalk";
-console.log(chalk.hex("#f58442")("\t Welcome to CLI-Currency Converter \t"));
+console.log(chalk.bgWhiteBright.magenta("\n Welcome to currency convertor"));
 let currency = {
     USD: 1,
-    PKR: 277.54,
-    INR: 85,
-    IRR: 42076.08,
-    SAR: 3.75,
-    EUR: 0.92,
+    PKR: 279.72,
+    SUR: 3.75,
+    INR: 83.36,
+    EURO: 0.93
 };
-let user_answer = await inquirer.prompt([
-    {
-        name: "fromCurrency",
-        type: "list",
-        choices: ["USD", "PKR", "INR", "IRR", "SAR", "EUR"],
-        message: "Select the currency?"
-    },
-    {
-        name: "toCurrency",
-        type: "list",
-        choices: ["USD", "PKR", "INR", "IRR", "SAR", "EUR"],
-        message: "Select the currency to convert?"
-    },
-    {
-        name: "amount",
-        type: "number",
-        message: "Enter your amount?"
+let condition = true;
+while (condition) {
+    let userAnswer = await inquirer.prompt([
+        {
+            name: "from",
+            type: 'list',
+            message: "Select the currency to convert from:",
+            choices: ["USD", "PKR", "SUR", "INR", "EURO"]
+        },
+        {
+            name: "to",
+            type: "list",
+            message: "Select the currency to convert into:",
+            choices: ["USD", "PKR", "SUR", "INR", "EURO"]
+        },
+        {
+            name: "amount",
+            type: "number",
+            message: "Enter your amount do want to convert:",
+        }
+    ]);
+    let { from, to, amount } = userAnswer;
+    let fromAmount = currency[from];
+    let toAmount = currency[to];
+    let baseCalculation = amount / fromAmount;
+    let finalCalculation = baseCalculation * toAmount;
+    let roundNumber = Math.round(finalCalculation);
+    console.log(chalk.bgMagentaBright.whiteBright(roundNumber));
+    let anotherAnswer = await inquirer.prompt([
+        {
+            name: "anotherQuestion",
+            type: "confirm",
+            message: "Do you to another convertion",
+            default: false,
+        }
+    ]);
+    if (anotherAnswer.anotherQuestion === true) {
+        let secondConvertion = await inquirer.prompt([
+            {
+                name: "seconndFrom",
+                type: "list",
+                message: "Select the currency to convert from:",
+                choices: ["USD", "PKR", "SUR", "INR", "EURO"]
+            },
+            {
+                name: "secondTo",
+                type: "list",
+                message: "Select the currency to convert into:",
+                choices: ["USD", "PKR", "SUR", "INR", "EURO"]
+            },
+            {
+                name: "secondAmount",
+                type: "number",
+                message: "Enter your amount do want to convert:",
+            },
+        ]);
+        let { secondFrom, secondTo, secondAmount } = secondConvertion;
+        let secondFromCurrency = currency[secondFrom];
+        let secondToCurrency = currency[secondTo];
+        let secondBase = secondAmount / secondFrom;
+        let secondFinalCalculation = secondBase * secondTo;
+        console.log(chalk.bgMagentaBright.whiteBright(Math.round(secondFinalCalculation)));
+        condition = false;
     }
-]);
-let fromAmount = currency[user_answer.fromCurrency];
-let toAmount = currency[user_answer.toCurrency];
-let totalAmount = user_answer.amount;
-let baseAmount = totalAmount / fromAmount;
-let convert = baseAmount * toAmount;
-convert = Math.round(convert);
-console.log(convert);
+    else {
+        console.log(chalk.bgMagentaBright.whiteBright(`Thanks for using`));
+        condition = false;
+    }
+}
